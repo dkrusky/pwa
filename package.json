@@ -1,0 +1,27 @@
+{
+  "name": "pwa",
+  "version": "1.0.0",
+  "description": "Core Service",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "sass:compile": "node-sass --output-style compressed layout/scss/main.scss layout/style.css",
+    "js:compile": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Krusky",
+  "license": "GNU",
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-banner": "^0.6.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-jshint": "^2.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^4.0.0",
+    "node-sass": "^4.9.4"
+  }
+}

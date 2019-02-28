@@ -1,0 +1,13 @@
+AddDefaultCharset UTF-8
+DefaultLanguage en-US
+
+Header unset Set-Cookie
+Header set Server "Microsoft-IIS/4.0"
+
+<FilesMatch "\.(ini|log|sh)$">
+    Require all denied
+</FilesMatch>
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !\.(?:css|js|jpe?g|gif|png|ico|webp|json|xml|txt)$ [NC]
+RewriteRule ^(.*)$ app.php [L,QSA]
