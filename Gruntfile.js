@@ -1,10 +1,11 @@
+var zlib = require("zlib");
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     // build css
     sass: {
-      loaderBoxes {
+      loaderBoxes: {
           files: {
               'layout/loaders/boxes/index.css': 'layout/src/scss/loaders/boxes.scss',
               'layout/loaders/curves/index.css': 'layout/src/scss/loaders/curves.scss'
@@ -12,23 +13,33 @@ module.exports = function(grunt) {
       },
       main: {
         files: {
-          'layout/<%= pkg.name %>.css': 'layout/src/main.scss'
+          'layout/css/main.css': 'layout/src/scss/main.scss'
         }
       }
     },
 
     // minify css
     cssmin: {
-      loaderBoxes {
+      loaderBoxes: {
           files: {
               'layout/loaders/boxes/index.min.css': 'layout/loaders/boxes/index.css',
-              'layout/loaders/curves/index.min.css': 'layout/loaders/curves/index.css'
+              'layout/loaders/curves/index.min.css': 'layout/loaders/curves/index.css',
+              'layout/css/main.min.css': 'layout/css/main.css'
           }
-      },
-      build: {
-        src: 'layout/src/<%= pkg.name %>.css',
-        dest: 'layout/<%= pkg.name %>.min.css'
-      },
+      }
+    },
+
+    // don't mess with angular code
+    ngAnnotate: {
+        options: {
+            singleQuotes: true
+        },
+        app: {
+            files: {
+                'layout/src/js/app-min-safe/bundle.js': ['layout/src/js/app/**/*.js'],
+                'layout/src/js/app-min-safe/app.js': ['layout/src/js/app.js'],
+            }
+        }
     },
 
     // combine javascript
@@ -42,7 +53,8 @@ module.exports = function(grunt) {
       },
       app: {
           src: [
-                'layout/src/js/angular/app.js'
+                'layout/src/js/app-min-safe/app.js',
+                'layout/src/js/app-min-safe/bundle.js'
           ],
           dest: 'layout/js/app.js'
       }
@@ -63,14 +75,28 @@ module.exports = function(grunt) {
 
     // force banner use
     usebanner: {
-        dev: {
+        dist: {
             options: {
                 position: 'top',
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */',
                 linebreak: true
             },
             files: {
-                src: [ 'layout/css/<%= pkg.name %>.min.css', 'layout/js/<%= pkg.name %>.min.js', 'layout/js/service-worker.min.js' ]
+                src: [ 'layout/css/main.min.css', 'layout/js/app.min.js', 'layout/js/service-worker.min.js' ]
+            }
+        }
+    },
+
+    // gzip assets in use for smallest possible size
+    compress: {
+        dist: {
+            options: {
+                mode: 'gzip',
+                level: zlib.constants.Z_BEST_COMPRESSION
+            },
+            files: {
+               'layout/js/app.min.js.gz': ['layout/js/app.min.js'],
+               'layout/css/main.min.css.gz': ['layout/css/main.min.css']
             }
         }
     },
@@ -81,22 +107,25 @@ module.exports = function(grunt) {
         'layout/loaders/boxes/index.css.map',
         'layout/loaders/curves/index.css',
         'layout/loaders/curves/index.css.map',
+        'layout/css/main.css',
+        'layout/css/main.css.map',
         'layout/js/service-worker.js',
         'layout/js/app.js',
-        'layout/css/<%= pkg.name %>.css',
-        'layout/src/<%= pkg.name %>.css.map',
-        '.sass-cache/'
+        '.sass-cache/',
+        'layout/src/js/app-min-safe/'
     ],
 
   });
 
+  grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-banner');
 
-  grunt.registerTask('default', ['sass', 'cssmin', 'concat', 'uglify', 'usebanner', 'clean']);
+  grunt.registerTask('default', ['sass', 'cssmin', 'ngAnnotate', 'concat', 'uglify', 'usebanner', 'compress', 'clean']);
 
 };

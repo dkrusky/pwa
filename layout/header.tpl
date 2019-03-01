@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="WebsiteApp">
 <head>
-    <title>{$header->title}</title>
-    <meta name="description" content="{$header->description}">
-    <meta name="theme-color" content="{$THEME->COLOR}">
+    <title>{$headers->title}</title>
+    <meta name="description" content="{$headers->description}">
+    <meta name="theme-color" content="{$THEME['COLOR']}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="{$BASE_URL}manifest.json">
     <link rel="preload" as="style" onload="this.rel='stylesheet'" href="https://cdn.jsdelivr.net/combine/npm/@fortawesome/fontawesome-free@5.7.2/css/brands.min.css,npm/@fortawesome/fontawesome-free@5.7.2/css/fontawesome.min.css,npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <link rel="preload" as="style" onload="this.rel='stylesheet'" href="{$BASE_URL}layout/css/main.min.css.gz">
 
     <style>
       {literal}
@@ -18,7 +19,7 @@
     </style>
 
     <script>
-    var serviceWorkerURI = '{$BASE_URL}layout/js/service-worker.min.js';
+    var serviceWorkerURI = '{$BASE_URL}service-worker.js';
     {literal}
     (function(){
       // ServiceWorker is a progressive technology. Ignore unsupported browsers

@@ -7,7 +7,13 @@ include 'settings/configuration.php';
 require 'lib/flight/flight/Flight.php';
 require 'lib/smarty/libs/Smarty.class.php';
 require 'lib/db.php';
-require 'lib/webpages.php';
+require 'lib/core.php';
+
+if(DEBUG_MODE === true) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', true);
+}
+
 
 // Register Smarty as the view class
 // Also pass a callback function to configure Smarty on load
@@ -16,7 +22,18 @@ Flight::register('view', 'Smarty', array(), function($smarty){
     $smarty->compile_dir = 'tmp/templates/';
     $smarty->cache_dir = 'tmp/cache/';
 });
+
+if(DEBUG_MODE === true) {
+    Flight::view()->debugging = true;
+    Flight::view()->error_reporting = E_ALL;
+    Flight::view()->debugging_ctrl = 'URL';
+}
+
 Flight::view()->assign('APP_VERSION', APP_VERSION);
+Flight::view()->assign('THEME', THEME);
+Flight::view()->assign('BASE_URL', BASE_URL);
+Flight::view()->assign('CANONICAL_BASE_URL', CANONICAL_BASE_URL);
+Flight::view()->assign('loader', LOADER_STYLE);
 
 // Register database class
 Flight::register('db', 'DB');

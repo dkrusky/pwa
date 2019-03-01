@@ -20,7 +20,7 @@ To compile and minify the scripts and scss as well as cleanup, simply run the fo
 
 ### Route configuration
 
-To configure routes, please see the file `/configuration/routes.php` as well as the documentation for Flight .  This project uses class based route destinations which are located in `/models/`. Smarty and a DB class (PDO wrapper) are already injected and accessible in any new classes that inherit from `Core` (located in `/lib/core.php`).
+To configure routes, please see the file `/settings/routes.php` as well as the documentation for Flight .  This project uses class based route destinations which are located in `/models/`. Smarty and a DB class (PDO wrapper) are already injected and accessible in any new classes that inherit from `Core` (located in `/lib/core.php`).
 
 ### Database configuration
 

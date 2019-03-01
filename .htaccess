@@ -9,5 +9,36 @@ Header set Server "Microsoft-IIS/4.0"
 </FilesMatch>
 
 RewriteEngine On
-RewriteCond %{REQUEST_URI} !\.(?:css|js|jpe?g|gif|png|ico|webp|json|xml|txt)$ [NC]
+
+<IfModule mod_headers.c>
+    # Serve gzip compressed CSS files if they exist 
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.css" "$1\.css\.gz" [QSA]
+
+    # Serve gzip compressed JS files if they exist 
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.js" "$1\.js\.gz" [QSA]
+
+
+    # Serve correct content types, and prevent mod_deflate double gzip.
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+    RewriteRule "\.js\.gz$" "-" [T=text/javascript,E=no-gzip:1]
+
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve correct encoding type.
+      Header append Content-Encoding gzip
+
+      # Force proxies to cache gzipped & 
+      # non-gzipped css/js files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+RewriteRule ^service-worker.js$ layout/js/service-worker.min.js [L]
+RewriteCond %{REQUEST_URI} !\.(?:css|js|jpe?g|gif|png|ico|webp|gz)$ [NC]
 RewriteRule ^(.*)$ app.php [L,QSA]

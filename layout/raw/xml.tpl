@@ -2,12 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {foreach from=$data item=link}
 <url>
-    <loc>{$link->loc}</loc>
-    <lastmod>{$link->lastmod}</lastmod>
-    <changefreq>{$link->changefreq}</changefreq>
-    {if !empty($link->priority)}
-    <priority>{$link->priority}</priority>
-    {/if}
+    <loc>{$link['loc']}</loc>
+    <lastmod>{$link['lastmod']}</lastmod>
+    <changefreq>{$link['changefreq']}</changefreq>
+    {if $link['priority']}<priority>{$link['priority']|number_format:1}</priority>{/if}
 </url>
 {/foreach}
 </urlset>

@@ -1,1 +1,1 @@
-{ $data | json_encode }
+{$data|@json_encode:64 nofilter}

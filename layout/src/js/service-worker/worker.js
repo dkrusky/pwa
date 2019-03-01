@@ -98,7 +98,12 @@ self.addEventListener("fetch", function(event) {
                  available to caches.match(event.request) calls, when looking
                  for cached responses.
               */
-              console.log(event.request);
+              if(event.request.url.substring(0,8) === 'https://') {
+                  console.log(event.request);
+                  return cache.put(event.request, cacheCopy);
+              } else {
+                  return false;
+              }
               return cache.put(event.request, cacheCopy);
             })
             .then(function() {

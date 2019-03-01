@@ -11,5 +11,5 @@ var version = 'v1::';
 */
 var offlineFundamentals = [
   '',
-  'app.js'
+  'layout/js/app.min.js'
 ];
