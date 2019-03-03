@@ -83,7 +83,8 @@ Disallow: ' . BASE_URL . '/
 User-agent: Googlebot-Image
 Disallow: ' . BASE_URL . '/layout/images/*
 
-Sitemap: ' . CANONICAL_BASE_URL . '/sitemap.xml';
+Sitemap: ' . CANONICAL_BASE_URL . '/sitemap.xml'
+
 ];
             $this->response($robots, 'raw/text');
         }
